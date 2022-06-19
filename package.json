@@ -1,0 +1,18 @@
+{
+  "name": "notty",
+  "version": "1.0.0",
+  "description": "PWA notes with Svelte",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "build": "node esbuild",
+    "dev": "node esbuild --dev",
+    "start": "npx derver --production --port=5050 public"
+  },
+  "devDependencies": {
+    "derver": "^0.5.3",
+    "esbuild": "^0.14.46",
+    "esbuild-svelte": "^0.7.1",
+    "svelte": "^3.48.0"
+  }
+}
