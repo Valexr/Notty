@@ -1,2 +1,2 @@
-# notty
+# Notty
 PWA notes with Svelte
