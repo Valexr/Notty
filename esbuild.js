@@ -1,52 +1,55 @@
-const esbuild = require("esbuild");
-const { derver } = require("derver");
-const sveltePlugin = require("esbuild-svelte");
+import { build, context } from 'esbuild';
+import svelte from 'esbuild-svelte';
+import preprocess from 'svelte-preprocess';
+import rm from './env/rm.js';
+import log from './env/log.js';
 
 const DEV = process.argv.includes('--dev');
 
-// Development server configuration. To configure production server
-// see `start` script in `package.json` file.
+const serveOptions = {
+    servedir: 'public'
+};
 
-const HOST = 'localhost';
-const PORT = 5050;
-
-esbuild.build({
-    // esbuild configuration
-    entryPoints: ['src/main.js'],
-    bundle: true,
-    outfile: 'public/build/bundle.js',
-    mainFields: ['svelte', 'module', 'main'],
-    minify: !DEV,
-    incremental: DEV,
-    sourcemap: DEV,  // Use `DEV && 'inline'` to inline sourcemaps to the bundle
-    plugins: [
-        sveltePlugin({
-
-            compileOptions: {
-                // Svelte compile options
-                dev: DEV,
-                css: false  //use `css:true` to inline CSS in `bundle.js`
-            },
-
-            preprocess: [
-                // Place here any Svelte preprocessors
-            ]
-
-        })
+const svelteOptions = {
+    compileOptions: {
+        dev: DEV,
+        css: false,
+        immutable: true
+    },
+    preprocess: [
+        preprocess({
+            sourceMap: DEV,
+            typescript: true,
+        }),
     ]
+};
 
-}).then(bundle => {
-    DEV && derver({
-        dir: 'public',
-        host: HOST,
-        port: PORT,
-        watch: ['public', 'src'],
-        onwatch: async (lr, item) => {
-            if (item == 'src') {
-                lr.prevent();
-                bundle.rebuild().catch(err => lr.error(err.message, 'Svelte compile error'));
-            }
-        }
-    });
-});
+const buildOptions = {
+    bundle: true,
+    minify: !DEV,
+    sourcemap: DEV,
+    entryPoints: ['src/app.ts'],
+    outdir: 'public/build',
+    format: 'esm',
+    loader: { '.svg': 'text' },
+    plugins: [svelte(svelteOptions), log],
+    inject: DEV ? ['./env/lr.js'] : [],
+    legalComments: "none",
+};
 
+await rm('public/build');
+
+if (DEV) {
+    const ctx = await context(buildOptions);
+
+    await ctx.watch();
+    const { host, port } = await ctx.serve(serveOptions);
+
+    process.on('SIGTERM', ctx.dispose);
+    process.on("exit", ctx.dispose);
+
+    const time = new Date().toLocaleTimeString();
+    console.dir(`${time} ${process.env.npm_package_name} started on http://${host}:${port}`);
+} else {
+    await build(buildOptions);
+}

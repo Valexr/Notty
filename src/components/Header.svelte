@@ -1,19 +1,19 @@
+<script>
+    import { fly } from "svelte/transition";
+    import { expoOut } from "svelte/easing";
+
+    export let id,
+        zIndex = 100;
+</script>
+
 <header
-    id="{id}"
+    {id}
     style="z-index: {zIndex}"
-    in:fly="{{ y: -16, duration: 300, delay: 35, easing: expoOut }}"
-    out:fly="{{ y: -8, duration: 100 }}"
+    in:fly={{ y: -16, duration: 300, delay: 35, easing: expoOut }}
+    out:fly={{ y: -8, duration: 100 }}
 >
     <slot />
 </header>
-
-<script>
-    export let id,
-        zIndex = 100;
-
-    import { fly } from 'svelte/transition';
-    import { expoOut } from 'svelte/easing';
-</script>
 
 <style>
     header {

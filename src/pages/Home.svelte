@@ -1,17 +1,69 @@
+<script>
+    import { cards } from "$lib/stores";
+    import { pathname, pathparams } from "$components/Router/path";
+    import { navigate } from "$components/Router/navigate";
+    import Header from "$components/Header.svelte";
+    import View from "$components/View.svelte";
+    import Icon from "$components/Icon.svelte";
+    import IconButton from "$components/IconButton.svelte";
+    import CardList from "$components/CardList.svelte";
+
+    // Get cards only with active state
+    $: data = $cards.filter((card) => {
+        if (card.state === "active") return true;
+        return false;
+    });
+
+    // Get menu state by url
+    $: menuIsOpen = $pathparams ? $pathparams.get("menu") === "open" : false;
+
+    let addCard = () => {
+        if ($cards[0]) {
+            if ($cards[0].content !== "") {
+                $cards = [
+                    {
+                        id: Date.now(),
+                        type: "text",
+                        content: "",
+                        state: "active",
+                    },
+                    ...$cards,
+                ];
+            } else if ($cards[0].state === "archived") {
+                $cards = [
+                    {
+                        id: Date.now(),
+                        type: "text",
+                        content: "",
+                        state: "active",
+                    },
+                    ...$cards,
+                ];
+            }
+        } else {
+            $cards = [
+                { id: Date.now(), type: "text", content: "", state: "active" },
+                ...$cards,
+            ];
+        }
+        navigate("/editor?id=" + $cards[0].id);
+    };
+</script>
+
 <!-- Header -->
 <Header id="MainHeader">
     <h5 class="text-logo">notty</h5>
     <div class="header-icons">
         <IconButton
-            on:click="{() => (menuIsOpen ? navigate('/search') : addCard())}"
+            on:click={() => (menuIsOpen ? navigate("/search") : addCard())}
         >
-            {menuIsOpen ? 'search' : 'add'}
+            {menuIsOpen ? "search" : "add"}
         </IconButton>
         <IconButton
-            on:click="{() =>
-                menuIsOpen ? navigate('/') : navigate('/?menu=open')}"
+            on:click={() =>
+                menuIsOpen ? navigate("/") : navigate("/?menu=open")}
         >
-            {menuIsOpen ? 'expand_less' : 'expand_more'}
+            {menuIsOpen ? "expand_less" : "expand_more"}
         </IconButton>
     </div>
 </Header>
@@ -20,17 +72,17 @@
 {#if menuIsOpen}
     <View
         id="Navigation"
-        zIndex="{10}"
+        zIndex={10}
         background="var(--gradient)"
-        flyIn="{-32}"
-        flyOut="{-16}"
+        flyIn={-32}
+        flyOut={-16}
     >
         <nav>
-            <li class="list-item" on:click="{() => navigate('/archive')}">
+            <li class="list-item" on:click={() => navigate("/archive")}>
                 Archive <Icon>access_time</Icon>
             </li>
 
-            <li class="list-item" on:click="{() => navigate('/settings')}">
+            <li class="list-item" on:click={() => navigate("/settings")}>
                 Settings <Icon>settings</Icon>
             </li>
         </nav>
@@ -39,62 +91,10 @@
 
 <!-- CardList -->
 <View id="CardList" paddingTop="90px">
-    <CardList data="{data}">
+    <CardList {data}>
         <p>Tap <Icon>add</Icon> to add new card</p>
     </CardList>
 </View>
-
-<script>
-    import { cards } from '../stores';
-    import { pathname, pathparams } from '../router/pathname';
-    import { navigate } from '../router/navigate';
-    import Header from '../components/Header.svelte';
-    import View from '../components/View.svelte';
-    import Icon from '../components/Icon.svelte';
-    import IconButton from '../components/IconButton.svelte';
-    import CardList from '../components/CardList.svelte';
-
-    // Get cards only with active state
-    $: data = $cards.filter((card) => {
-        if (card.state === 'active') return true;
-        return false;
-    });
-
-    // Get menu state by url
-    $: menuIsOpen = $pathparams ? $pathparams.get('menu') === 'open' : false;
-
-    let addCard = () => {
-        if ($cards[0]) {
-            if ($cards[0].content !== '') {
-                $cards = [
-                    {
-                        id: Date.now(),
-                        type: 'text',
-                        content: '',
-                        state: 'active',
-                    },
-                    ...$cards,
-                ];
-            } else if ($cards[0].state === 'archived') {
-                $cards = [
-                    {
-                        id: Date.now(),
-                        type: 'text',
-                        content: '',
-                        state: 'active',
-                    },
-                    ...$cards,
-                ];
-            }
-        } else {
-            $cards = [
-                { id: Date.now(), type: 'text', content: '', state: 'active' },
-                ...$cards,
-            ];
-        }
-        navigate('/editor?id=' + $cards[0].id);
-    };
-</script>
 
 <style>
     /* Logo */
