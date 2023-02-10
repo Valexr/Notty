@@ -2,7 +2,6 @@
   "name": "notty",
   "version": "1.0.0",
   "description": "PWA notes with Svelte",
-  "license": "MIT",
   "main": "index.js",
   "scripts": {
     "build": "node esbuild",
