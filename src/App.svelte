@@ -27,7 +27,7 @@
             navigate("/editor?id=" + $cards[0].id);
         });
     } else {
-        onMount(() => navigate("/"));
+        // onMount(() => navigate("/"));
     }
 </script>
 
