@@ -1,15 +1,15 @@
 <script>
     import { onMount } from "svelte";
     import { cards, contextMenu } from "$lib/stores";
-    import { pathparams } from "$components/Router/path";
-    import { navigate } from "$components/Router/navigate";
-    import Route from "$components/Router/Route.svelte";
+    import { pathparams } from "$lib/router/path";
+    import { navigate } from "$lib/router/navigate";
+    import Route from "$lib/router/Route.svelte";
     import Home from "$pages/home.svelte";
     import Editor from "$pages/editor.svelte";
     import Search from "$pages/search.svelte";
     import Archive from "$pages/archive.svelte";
     import Settings from "$pages/settings.svelte";
-    import ContextMenu from "$components/ContextMenu.svelte";
+    import ContextMenu from "$lib/components/ContextMenu.svelte";
 
     // Share target action and initial redirect
     const parsedUrl = new URL(window.location);

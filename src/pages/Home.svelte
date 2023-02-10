@@ -1,12 +1,12 @@
 <script>
     import { cards } from "$lib/stores";
-    import { pathname, pathparams } from "$components/Router/path";
-    import { navigate } from "$components/Router/navigate";
-    import Header from "$components/Header.svelte";
-    import View from "$components/View.svelte";
-    import Icon from "$components/Icon.svelte";
-    import IconButton from "$components/IconButton.svelte";
-    import CardList from "$components/CardList.svelte";
+    import { pathname, pathparams } from "$lib/router/path";
+    import { navigate } from "$lib/router/navigate";
+    import Header from "$lib/components/Header.svelte";
+    import View from "$lib/components/View.svelte";
+    import Icon from "$lib/components/Icon.svelte";
+    import IconButton from "$lib/components/IconButton.svelte";
+    import CardList from "$lib/components/CardList.svelte";
 
     // Get cards only with active state
     $: data = $cards.filter((card) => {

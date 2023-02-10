@@ -4,8 +4,8 @@
     import { expoOut } from "svelte/easing";
     import { cards } from "$lib/stores";
     import { moveElement } from "$lib/utils";
-    import { pathparams } from "$components/Router/path";
-    import BackPanel from "$components/BackPanel.svelte";
+    import { pathparams } from "$lib/router/path";
+    import BackPanel from "$lib/components/BackPanel.svelte";
 
     let editor;
 

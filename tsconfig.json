@@ -5,9 +5,6 @@
             "$lib/*": [
                 "src/lib/*"
             ],
-            "$components/*": [
-                "src/lib/components/*"
-            ],
             "$pages/*": [
                 "src/pages/*"
             ],

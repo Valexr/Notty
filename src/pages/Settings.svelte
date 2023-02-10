@@ -1,7 +1,7 @@
 <script>
     import { cards } from "$lib/stores";
-    import BackPanel from "$components/BackPanel.svelte";
-    import View from "$components/View.svelte";
+    import BackPanel from "$lib/components/BackPanel.svelte";
+    import View from "$lib/components/View.svelte";
 </script>
 
 <BackPanel />

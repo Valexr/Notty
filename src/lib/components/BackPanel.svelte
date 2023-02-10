@@ -1,5 +1,5 @@
 <script>
-    import { navigate } from "./Router/navigate";
+    import { navigate } from "$lib/router/navigate";
     import Header from "./Header.svelte";
     import IconButton from "./IconButton.svelte";
 </script>

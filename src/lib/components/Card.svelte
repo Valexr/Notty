@@ -1,6 +1,6 @@
 <script>
     import { onMount } from "svelte";
-    import { navigate } from "./Router/navigate";
+    import { navigate } from "$lib/router/navigate";
     import { cards, contextMenu } from "$lib/stores";
     import { moveElement, deleteElement } from "$lib/utils";
     import { swipe } from "$lib/actions/swipe";

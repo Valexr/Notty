@@ -1,9 +1,9 @@
 <script>
     import { onMount } from "svelte";
     import { cards, searchText } from "$lib/stores";
-    import View from "$components/View.svelte";
-    import BackPanel from "$components/BackPanel.svelte";
-    import CardList from "$components/CardList.svelte";
+    import View from "$lib/components/View.svelte";
+    import BackPanel from "$lib/components/BackPanel.svelte";
+    import CardList from "$lib/components/CardList.svelte";
 
     let input;
 
