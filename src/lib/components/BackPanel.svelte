@@ -5,6 +5,6 @@
 </script>
 
 <Header id="BackPanel">
-    <IconButton on:click={() => navigate("/")}>keyboard_arrow_left</IconButton>
+    <IconButton on:click={() => history.back()}>keyboard_arrow_left</IconButton>
     <slot />
 </Header>
