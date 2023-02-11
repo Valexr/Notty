@@ -16,7 +16,7 @@
     };
 </script>
 
-<view-containder
+<div
     {id}
     class="view"
     style="height: {fullHeight}; z-index: {zIndex}; background: {background}; padding-top: {paddingTop};"
@@ -24,10 +24,10 @@
     out:fly={{ y: flyOut, duration: 100 }}
 >
     <slot />
-</view-containder>
+</div>
 
 <style>
-    view-containder.view {
+    .view {
         display: block;
         width: 100vw;
         height: auto;
@@ -41,7 +41,7 @@
     }
 
     @media only screen and (max-width: 700px) {
-        view-containder.view {
+        .view {
             padding: 0 4.5vw;
         }
     }

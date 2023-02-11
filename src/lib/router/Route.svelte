@@ -14,6 +14,7 @@
     });
 </script>
 
-{#if path === $pathname}
+{console.log($pathname, path, location)}
+{#if $pathname.includes(path)}
     <slot />
 {/if}

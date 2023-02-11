@@ -78,7 +78,7 @@
         flyOut={-16}
     >
         <nav>
-            <li class="list-item" on:click={() => navigate("/archive")}>
+            <li class="list-item" on:click={() => navigate("archive")}>
                 Archive <Icon>access_time</Icon>
             </li>
 
