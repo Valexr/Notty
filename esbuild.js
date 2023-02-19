@@ -35,6 +35,7 @@ const buildOptions = {
     plugins: [svelte(svelteOptions), log],
     inject: DEV ? ['./env/lr.js'] : [],
     legalComments: "none",
+    logLevel: 'info'
 };
 
 await rm('public/build');
@@ -43,13 +44,10 @@ if (DEV) {
     const ctx = await context(buildOptions);
 
     await ctx.watch();
-    const { host, port } = await ctx.serve(serveOptions);
+    await ctx.serve(serveOptions);
 
     process.on('SIGTERM', ctx.dispose);
     process.on("exit", ctx.dispose);
-
-    const time = new Date().toLocaleTimeString();
-    console.dir(`${time} ${process.env.npm_package_name} started on http://${host}:${port}`);
 } else {
     await build(buildOptions);
 }
