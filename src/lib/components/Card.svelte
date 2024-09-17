@@ -62,13 +62,13 @@
     let cardOut = (action) => {
         cardElement.style.setProperty(
             "transition",
-            "transform var(--transition), opacity var(--transition), margin-bottom var(--transition)"
+            "transform var(--transition), opacity var(--transition), margin-bottom var(--transition)",
         );
         cardElement.style.setProperty("transform", "translateX(450px)");
         cardElement.style.setProperty("opacity", "0");
         cardElement.style.setProperty(
             "margin-bottom",
-            cardElement.offsetHeight * -1 + "px"
+            cardElement.offsetHeight * -1 + "px",
         );
         setTimeout(() => {
             action();
@@ -79,6 +79,8 @@
 <card-item
     id={card.id}
     class="block"
+    role="button"
+    tabindex="0"
     on:click={clickHandler}
     use:longpress
     on:longpress={(event) => contextMenuLongpress(event)}

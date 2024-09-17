@@ -1,6 +1,6 @@
 import { build, context } from 'esbuild';
 import svelte from 'esbuild-svelte';
-import preprocess from 'svelte-preprocess';
+import { sveltePreprocess } from 'svelte-preprocess';
 import rm from './env/rm.js';
 import log from './env/log.js';
 
@@ -17,7 +17,7 @@ const svelteOptions = {
         immutable: true
     },
     preprocess: [
-        preprocess({
+        sveltePreprocess({
             sourceMap: DEV,
             typescript: true,
         }),
