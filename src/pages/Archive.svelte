@@ -4,10 +4,7 @@
     import BackPanel from "$lib/components/BackPanel.svelte";
     import CardList from "$lib/components/CardList.svelte";
 
-    $: data = $cards.filter((card) => {
-        if (card.state === "archived") return true;
-        return false;
-    });
+    const data = $derived($cards.filter((card) => card.state === "archived"));
 </script>
 
 <BackPanel />

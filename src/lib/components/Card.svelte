@@ -6,14 +6,12 @@
     import { swipe } from "$lib/actions/swipe";
     import { longpress } from "$lib/actions/longpress";
 
-    export let card,
-        editable = true,
-        swipeable = true;
+    let { card, editable = true, swipeable = true } = $props();
 
-    let cardElement;
+    let cardElement = $state(null);
 
     // On change save to localStorage
-    $: localStorage.setItem("cards", JSON.stringify($cards));
+    $effect(() => localStorage.setItem("cards", JSON.stringify($cards)));
 
     // Handlers
     let clickHandler = () => {
@@ -76,15 +74,16 @@
     };
 </script>
 
+<!-- svelte-ignore a11y_click_events_have_key_events -->
 <card-item
     id={card.id}
     class="block"
     role="button"
     tabindex="0"
-    on:click={clickHandler}
     use:longpress
-    on:longpress={(event) => contextMenuLongpress(event)}
-    on:contextmenu={(event) => contextMenuHandler(event)}
+    onlongpress={contextMenuLongpress}
+    oncontextmenu={contextMenuHandler}
+    onclick={clickHandler}
     bind:this={cardElement}
 >
     {card.content}

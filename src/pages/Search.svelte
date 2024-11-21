@@ -11,11 +11,14 @@
 
     onMount(() => input.focus());
 
-    $: data = $cards.filter((card) => {
-        if (card.content.toLowerCase().search($searchText.toLowerCase()) !== -1)
-            return true;
-        return false;
-    });
+    const data = $derived(
+        $cards.filter((card) => {
+            return (
+                card.content.toLowerCase().search($searchText.toLowerCase()) !==
+                -1
+            );
+        }),
+    );
 </script>
 
 <BackPanel>

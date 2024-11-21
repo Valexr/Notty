@@ -1,16 +1,14 @@
 <script>
     import Card from "./Card.svelte";
 
-    export let data,
-        editable = true,
-        swipeable = true;
+    let { data, editable = true, swipeable = true, children } = $props();
 </script>
 
 <main class="card-list" class:empty={data.length === 0}>
     {#each data as card (card.id)}
         <Card {card} {editable} {swipeable} />
     {:else}
-        <slot />
+        {@render children?.()}
     {/each}
 </main>
 

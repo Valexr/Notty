@@ -4,14 +4,16 @@
     import { contextMenu } from "$lib/stores";
     import Icon from "./Icon.svelte";
 
-    $: x =
+    const x = $derived(
         $contextMenu.pos.x + 200 > window.innerWidth
             ? $contextMenu.pos.x - 200
-            : $contextMenu.pos.x;
-    $: y =
+            : $contextMenu.pos.x,
+    );
+    const y = $derived(
         $contextMenu.pos.y + 200 > window.innerHeight
             ? $contextMenu.pos.y - 204
-            : $contextMenu.pos.y;
+            : $contextMenu.pos.y,
+    );
 
     onMount((event) => {
         window.addEventListener("click", (event) => {
@@ -28,7 +30,7 @@
     let copyCard = () => {
         let thisCard = document.getElementById($contextMenu.card.id);
         const isSafari = !!navigator.userAgent.match(
-            /Version\/[\d\.]+.*Safari/
+            /Version\/[\d\.]+.*Safari/,
         );
         isSafari
             ? (thisCard.style.webkitUserSelect = "all")
@@ -40,7 +42,7 @@
                 isSafari
                     ? (thisCard.style.webkitUserSelect = null)
                     : (thisCard.style.userSelect = null),
-            100
+            100,
         );
     };
 </script>
@@ -50,15 +52,17 @@
     style="top: {y}px; left: {x}px;"
     in:fade={{ duration: 100 }}
 >
-    <li class="list-item" on:click={copyCard}>
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+    <li class="list-item" onclick={copyCard}>
         <Icon fontSize="1.4rem">notes</Icon>
         Copy all
     </li>
-    <li class="list-item" on:click={() => $contextMenu.toggleState()}>
+    <li class="list-item" onclick={contextMenu.toggleState}>
         <Icon fontSize="1.4rem">access_time</Icon>
         {$contextMenu.card.state === "active" ? "Archive" : "Unarchive"}
     </li>
-    <li class="list-item" on:click={() => $contextMenu.deleteCard()}>
+    <li class="list-item" onclick={contextMenu.deleteCard}>
         <Icon fontSize="1.4rem">delete</Icon>
         Delete
     </li>

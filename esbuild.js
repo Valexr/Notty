@@ -14,7 +14,9 @@ const svelteOptions = {
     compileOptions: {
         dev: DEV,
         css: false,
-        immutable: true
+        immutable: true,
+        runes: true,
+        modernAst: true
     },
     preprocess: [
         sveltePreprocess({

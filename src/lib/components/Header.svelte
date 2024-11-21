@@ -1,9 +1,10 @@
-<script>
+<script lang="ts" module>
     import { fly } from "svelte/transition";
     import { expoOut } from "svelte/easing";
+</script>
 
-    export let id,
-        zIndex = 100;
+<script lang="ts">
+    let { id = "", zIndex = 100, children } = $props();
 </script>
 
 <header
@@ -12,7 +13,7 @@
     in:fly={{ y: -16, duration: 300, delay: 35, easing: expoOut }}
     out:fly={{ y: -8, duration: 100 }}
 >
-    <slot />
+    {@render children?.()}
 </header>
 
 <style>

@@ -1,9 +1,9 @@
-<script>
-    export let fontSize = "1.5rem";
+<script lang="ts">
+    let { fontSize = "1.5rem", children } = $props();
 </script>
 
 <i class="material-icons-outlined" style="font-size: {fontSize} !important;">
-    <slot />
+    {@render children?.()}
 </i>
 
 <style>

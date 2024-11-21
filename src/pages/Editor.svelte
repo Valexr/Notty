@@ -13,12 +13,12 @@
     let card =
         $cards[
             $cards.indexOf(
-                $cards.find((c) => c.id === parseInt($pathparams.get("id")))
+                $cards.find((c) => c.id === parseInt($pathparams.get("id"))),
             )
         ];
 
     // On change save to localStorage
-    $: localStorage.setItem("cards", JSON.stringify($cards));
+    $effect(() => localStorage.setItem("cards", JSON.stringify($cards)));
 
     // On open editor
     onMount(() => {
@@ -28,7 +28,7 @@
     });
 
     // Full window height style
-    let fullHeightStyle = "height:" + window.innerHeight + "px";
+    let fullHeightStyle = $state("height:" + window.innerHeight + "px");
     window.onresize = () => {
         fullHeightStyle = "height:" + window.innerHeight + "px";
     };
@@ -43,7 +43,8 @@
     in:fly={{ y: 16, delay: 35, duration: 300, easing: expoOut }}
     bind:value={card.content}
     bind:this={editor}
-/>
+>
+</textarea>
 
 <style>
     textarea {

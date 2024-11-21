@@ -9,13 +9,12 @@
     import CardList from "$lib/components/CardList.svelte";
 
     // Get cards only with active state
-    $: data = $cards.filter((card) => {
-        if (card.state === "active") return true;
-        return false;
-    });
+    const data = $derived($cards.filter((card) => card.state === "active"));
 
     // Get menu state by url
-    $: menuIsOpen = $pathparams ? $pathparams.get("menu") === "open" : false;
+    const menuIsOpen = $derived(
+        $pathparams ? $pathparams.get("menu") === "open" : false,
+    );
 
     let addCard = () => {
         if ($cards[0]) {
@@ -55,12 +54,12 @@
     <h5 class="text-logo">notty</h5>
     <div class="header-icons">
         <IconButton
-            on:click={() => (menuIsOpen ? navigate("/search") : addCard())}
+            onclick={() => (menuIsOpen ? navigate("/search") : addCard())}
         >
             {menuIsOpen ? "search" : "add"}
         </IconButton>
         <IconButton
-            on:click={() =>
+            onclick={() =>
                 menuIsOpen ? navigate("/") : navigate("/?menu=open")}
         >
             {menuIsOpen ? "expand_less" : "expand_more"}
@@ -78,11 +77,15 @@
         flyOut={-16}
     >
         <nav>
-            <li class="list-item" on:click={() => navigate("archive")}>
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+            <li class="list-item" onclick={() => navigate("archive")}>
                 Archive <Icon>access_time</Icon>
             </li>
 
-            <li class="list-item" on:click={() => navigate("/settings")}>
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+            <li class="list-item" onclick={() => navigate("/settings")}>
                 Settings <Icon>settings</Icon>
             </li>
         </nav>
@@ -124,7 +127,9 @@
         padding: var(--padding-s);
         margin-bottom: var(--padding-s);
         cursor: pointer;
-        transition: background var(--transition), transform var(--transition);
+        transition:
+            background var(--transition),
+            transform var(--transition);
         transition-timing-function: cubic-bezier(0.15, 1, 0.5, 1);
         border-radius: 3rem;
         z-index: 10;
