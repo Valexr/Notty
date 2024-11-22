@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
 
-export const pathname = writable<string>('/');
+export const pathName = writable<string>('/');
 
-export const pathparams = writable<URLSearchParams | null>(null);
+export const pathParams = writable<URLSearchParams>();

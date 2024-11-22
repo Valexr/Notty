@@ -1,68 +1,31 @@
-<script>
-    import { cards } from "$lib/stores";
-    import { pathname, pathparams } from "$lib/router/path";
-    import { navigate } from "$lib/router/navigate";
-    import Header from "$lib/components/Header.svelte";
-    import View from "$lib/components/View.svelte";
-    import Icon from "$lib/components/Icon.svelte";
-    import IconButton from "$lib/components/IconButton.svelte";
-    import CardList from "$lib/components/CardList.svelte";
+<script lang="ts" module>
+    import { cards, activeCards } from '$lib/stores';
+    import { pathName, pathParams } from '$lib/router/path';
+    import { navigate } from '$lib/router/navigate';
+    import Header from '$lib/components/Header.svelte';
+    import View from '$lib/components/View.svelte';
+    import Icon from '$lib/components/Icon/Icon.svelte';
+    import IconButton from '$lib/components/Icon/IconButton.svelte';
+    import CardList from '$lib/components/Card/CardList.svelte';
+</script>
 
-    // Get cards only with active state
-    const data = $derived($cards.filter((card) => card.state === "active"));
-
-    // Get menu state by url
+<script lang="ts">
     const menuIsOpen = $derived(
-        $pathparams ? $pathparams.get("menu") === "open" : false,
+        $pathParams ? $pathParams.get('menu') === 'open' : false,
     );
-
-    let addCard = () => {
-        if ($cards[0]) {
-            if ($cards[0].content !== "") {
-                $cards = [
-                    {
-                        id: Date.now(),
-                        type: "text",
-                        content: "",
-                        state: "active",
-                    },
-                    ...$cards,
-                ];
-            } else if ($cards[0].state === "archived") {
-                $cards = [
-                    {
-                        id: Date.now(),
-                        type: "text",
-                        content: "",
-                        state: "active",
-                    },
-                    ...$cards,
-                ];
-            }
-        } else {
-            $cards = [
-                { id: Date.now(), type: "text", content: "", state: "active" },
-                ...$cards,
-            ];
-        }
-        navigate("/editor?id=" + $cards[0].id);
-    };
 </script>
 
 <!-- Header -->
 <Header id="MainHeader">
     <h5 class="text-logo">notty</h5>
     <div class="header-icons">
-        <IconButton
-            onclick={() => (menuIsOpen ? navigate("/search") : addCard())}
-        >
-            {menuIsOpen ? "search" : "add"}
-        </IconButton>
+        <IconButton onclick={() => cards.add()}>add</IconButton>
+        <IconButton onclick={() => navigate('/search')}>search</IconButton>
         <IconButton
             onclick={() =>
-                menuIsOpen ? navigate("/") : navigate("/?menu=open")}
+                menuIsOpen ? navigate('/') : navigate('/?menu=open')}
         >
-            {menuIsOpen ? "expand_less" : "expand_more"}
+            {menuIsOpen ? 'expand_less' : 'expand_more'}
         </IconButton>
     </div>
 </Header>
@@ -77,24 +40,19 @@
         flyOut={-16}
     >
         <nav>
-            <!-- svelte-ignore a11y_click_events_have_key_events -->
-            <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-            <li class="list-item" onclick={() => navigate("archive")}>
+            <button class="list-item" onclick={() => navigate('/archive')}>
                 Archive <Icon>access_time</Icon>
-            </li>
-
-            <!-- svelte-ignore a11y_click_events_have_key_events -->
-            <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-            <li class="list-item" onclick={() => navigate("/settings")}>
+            </button>
+            <button class="list-item" onclick={() => navigate('/settings')}>
                 Settings <Icon>settings</Icon>
-            </li>
+            </button>
         </nav>
     </View>
 {/if}
 
 <!-- CardList -->
 <View id="CardList" paddingTop="90px">
-    <CardList {data}>
+    <CardList data={$activeCards}>
         <p>Tap <Icon>add</Icon> to add new card</p>
     </CardList>
 </View>
@@ -119,7 +77,7 @@
         border: none;
     }
 
-    li.list-item {
+    .list-item {
         width: 145px;
         display: flex;
         align-items: center;
@@ -134,14 +92,20 @@
         border-radius: 3rem;
         z-index: 10;
         font-weight: bold;
+        background: transparent;
+        border: 0;
     }
 
-    li.list-item:active {
+    .list-item:hover {
+        background: var(--hover);
+    }
+
+    .list-item:active {
         background: var(--hover);
         transform: scaleX(0.985) scaleY(0.95);
     }
 
-    :global(nav > li.list-item i) {
+    nav > .list-item :global(i) {
         margin-left: var(--padding-s);
     }
 </style>

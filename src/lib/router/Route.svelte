@@ -1,13 +1,15 @@
-<script lang="ts">
-    import { pathname, pathparams } from "./path";
+<script lang="ts" module>
+    import { pathName, pathParams } from './path';
+</script>
 
-    let { path = "/", title = document.title, children } = $props();
+<script lang="ts">
+    let { path = '/', title = document.title, children } = $props();
 
     function onpopstate() {
-        $pathname = location.pathname;
-        $pathparams = new URL(String(location)).searchParams;
+        pathName.set(window.location.pathname);
+        pathParams.set(new URL(String(location)).searchParams);
 
-        if (path === $pathname) {
+        if (path === $pathName) {
             document.title = title;
         }
     }
@@ -15,7 +17,6 @@
 
 <svelte:window {onpopstate} />
 
-{console.log($pathname, path, location)}
-{#if $pathname.includes(path)}
+{#if path === $pathName}
     {@render children?.()}
 {/if}

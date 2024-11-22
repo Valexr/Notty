@@ -1,22 +1,20 @@
 <script lang="ts" module>
-    import Icon from "./Icon.svelte";
+    import Icon from './Icon.svelte';
 </script>
 
 <script lang="ts">
     let { onclick, children } = $props();
 </script>
 
-<!-- svelte-ignore a11y_click_events_have_key_events -->
-<!-- svelte-ignore a11y_no_static_element_interactions -->
-<icon-button {onclick}>
-    <Icon>
-        {@render children?.()}
-    </Icon>
-</icon-button>
+<button {onclick}>
+    <Icon>{@render children?.()}</Icon>
+</button>
 
 <style>
-    icon-button {
+    button {
         display: inline-block;
+        background: transparent;
+        border: 0;
         padding: calc(var(--padding-s) * 1.5);
         margin: calc(-0.5 * var(--padding-s));
         cursor: pointer;
@@ -29,7 +27,7 @@
         line-height: 0;
     }
 
-    icon-button:active {
+    button:active {
         background: var(--hover);
         transform: scale(0.925);
     }

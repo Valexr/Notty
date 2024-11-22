@@ -1,27 +1,19 @@
-<script>
-    import { cards } from "$lib/stores";
-    import BackPanel from "$lib/components/BackPanel.svelte";
-    import View from "$lib/components/View.svelte";
+<script lang="ts" module>
+    import { cards } from '$lib/stores';
+    import BackPanel from '$lib/components/BackPanel.svelte';
+    import View from '$lib/components/View.svelte';
 </script>
 
 <BackPanel />
 <View id="Settings" paddingTop="90px">
     <menu class="settings">
         <section>
-            <!-- svelte-ignore a11y_click_events_have_key_events -->
-            <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-            <li
-                class="list-item"
-                onclick={() => {
-                    localStorage.setItem("cards", "[]");
-                    $cards = JSON.parse(localStorage.getItem("cards"));
-                }}
-            >
+            <button class="list-item" onclick={cards.clear}>
                 Clear ALL data
-            </li>
+            </button>
         </section>
         <section style="padding: var(--padding)">
-            Find a bug? Have a problem, question or idea? Contact me @ayndqy -
+            Find a bug? Have a problem, question or idea? Contact me @valexr -
             telegram
         </section>
     </menu>
@@ -39,16 +31,19 @@
         margin-bottom: 1.25rem;
     }
 
-    li.list-item {
+    .list-item {
         display: flex;
         align-items: center;
         line-height: 1;
         padding: var(--padding) var(--padding);
         transition: background var(--transition);
         cursor: pointer;
+        background: transparent;
+        border: 0;
+        width: 100%;
     }
 
-    li.list-item:hover {
+    .list-item:hover {
         background: var(--hover);
     }
 </style>

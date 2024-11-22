@@ -1,6 +1,8 @@
-<script>
-    import Card from "./Card.svelte";
+<script lang="ts" module>
+    import Card from './Card.svelte';
+</script>
 
+<script lang="ts">
     let { data, editable = true, swipeable = true, children } = $props();
 </script>
 
@@ -37,7 +39,7 @@
         }
     }
 
-    :global(main.card-list.empty i) {
+    main.card-list.empty :global(i) {
         display: inline-flex;
         vertical-align: -0.45rem;
         margin-right: 0.15rem;

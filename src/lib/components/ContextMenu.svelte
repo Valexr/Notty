@@ -1,9 +1,11 @@
-<script>
-    import { onMount } from "svelte";
-    import { fade } from "svelte/transition";
-    import { contextMenu } from "$lib/stores";
-    import Icon from "./Icon.svelte";
+<script lang="ts" module>
+    import { fade } from 'svelte/transition';
+    import { contextMenu, cards } from '$lib/stores';
+    import { outclick } from '$lib/actions/outclick';
+    import Icon from './Icon/Icon.svelte';
+</script>
 
+<script lang="ts">
     const x = $derived(
         $contextMenu.pos.x + 200 > window.innerWidth
             ? $contextMenu.pos.x - 200
@@ -15,61 +17,50 @@
             : $contextMenu.pos.y,
     );
 
-    onMount((event) => {
-        window.addEventListener("click", (event) => {
-            $contextMenu = {
-                isOpen: false,
-                card: $contextMenu.card,
-                pos: { x: $contextMenu.pos.x, y: $contextMenu.pos.y },
-                toggleState: () => $contextMenu.toggleState,
-                deleteCard: () => $contextMenu.deleteCard,
-            };
-        });
-    });
-
-    let copyCard = () => {
-        let thisCard = document.getElementById($contextMenu.card.id);
-        const isSafari = !!navigator.userAgent.match(
-            /Version\/[\d\.]+.*Safari/,
-        );
-        isSafari
-            ? (thisCard.style.webkitUserSelect = "all")
-            : (thisCard.style.userSelect = "text");
-        window.getSelection().selectAllChildren(thisCard);
-        document.execCommand("copy");
-        setTimeout(
-            () =>
-                isSafari
-                    ? (thisCard.style.webkitUserSelect = null)
-                    : (thisCard.style.userSelect = null),
-            100,
-        );
-    };
+    const menu = $state([
+        {
+            action: async (e) => {
+                await cards.copy(e.currentTarget.id);
+                $contextMenu.isOpen = false;
+            },
+            icon: 'notes',
+            text: 'Copy all',
+        },
+        {
+            action: (e) => {
+                cards.archive(e.currentTarget.id);
+                $contextMenu.isOpen = false;
+            },
+            icon: 'access_time',
+            text: $contextMenu.cardState === 'active' ? 'Archive' : 'Unarchive',
+        },
+        {
+            action: (e) => {
+                cards.delete(e.currentTarget.id);
+                $contextMenu.isOpen = false;
+            },
+            icon: 'delete',
+            text: 'Delete',
+        },
+    ]);
 </script>
 
 <menu
     class="card-menu"
     style="top: {y}px; left: {x}px;"
-    in:fade={{ duration: 100 }}
+    transition:fade={{ duration: 100 }}
+    use:outclick={() => ($contextMenu.isOpen = false)}
 >
-    <!-- svelte-ignore a11y_click_events_have_key_events -->
-    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-    <li class="list-item" onclick={copyCard}>
-        <Icon fontSize="1.4rem">notes</Icon>
-        Copy all
-    </li>
-    <li class="list-item" onclick={contextMenu.toggleState}>
-        <Icon fontSize="1.4rem">access_time</Icon>
-        {$contextMenu.card.state === "active" ? "Archive" : "Unarchive"}
-    </li>
-    <li class="list-item" onclick={contextMenu.deleteCard}>
-        <Icon fontSize="1.4rem">delete</Icon>
-        Delete
-    </li>
+    {#each menu as { action, icon, text }}
+        <button id={$contextMenu.cardID} class="list-item" onclick={action}>
+            <Icon>{icon}</Icon>
+            {text}
+        </button>
+    {/each}
 </menu>
 
 <style>
-    menu.card-menu {
+    .card-menu {
         position: absolute;
         padding: 0.5rem 0;
         z-index: 10000;
@@ -79,7 +70,7 @@
         border-radius: 0.4rem;
     }
 
-    li.list-item {
+    .list-item {
         display: flex;
         align-items: center;
         line-height: 1;
@@ -87,13 +78,16 @@
         transition: background var(--transition);
         cursor: pointer;
         font-weight: bold;
+        background: transparent;
+        border: 0;
+        width: 100%;
     }
 
-    li.list-item:hover {
+    .list-item:hover {
         background: var(--hover);
     }
 
-    :global(menu.card-menu > li.list-item > i) {
-        margin-right: calc(var(--padding-s) + 0.5rem);
+    .card-menu > .list-item :global(> i) {
+        margin-right: var(--padding-s);
     }
 </style>

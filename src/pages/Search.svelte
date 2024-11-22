@@ -1,38 +1,27 @@
-<script>
-    import { onMount } from "svelte";
-    import { cards, searchText } from "$lib/stores";
-    import View from "$lib/components/View.svelte";
-    import BackPanel from "$lib/components/BackPanel.svelte";
-    import CardList from "$lib/components/CardList.svelte";
+<script lang="ts" module>
+    import { autofocus } from '$lib/actions/autofocus';
+    import { searchText, searchedCards } from '$lib/stores';
+    import View from '$lib/components/View.svelte';
+    import BackPanel from '$lib/components/BackPanel.svelte';
+    import CardList from '$lib/components/Card/CardList.svelte';
+</script>
 
-    let input;
-
-    $searchText = "";
-
-    onMount(() => input.focus());
-
-    const data = $derived(
-        $cards.filter((card) => {
-            return (
-                card.content.toLowerCase().search($searchText.toLowerCase()) !==
-                -1
-            );
-        }),
-    );
+<script lang="ts">
+    $searchText = '';
 </script>
 
 <BackPanel>
     <input
-        class="search"
         type="text"
+        class="search"
         placeholder="Start your search here"
-        bind:this={input}
+        use:autofocus
         bind:value={$searchText}
     />
 </BackPanel>
 
 <View id="CardListSearch" paddingTop="90px">
-    <CardList {data} swipeable={false}>
+    <CardList data={$searchedCards} swipeable={false}>
         <p>Can't find anything</p>
     </CardList>
 </View>

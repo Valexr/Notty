@@ -1,48 +1,39 @@
-<script>
-    import { onMount } from "svelte";
-    import { fly } from "svelte/transition";
-    import { expoOut } from "svelte/easing";
-    import { cards } from "$lib/stores";
-    import { moveElement } from "$lib/utils";
-    import { pathparams } from "$lib/router/path";
-    import BackPanel from "$lib/components/BackPanel.svelte";
+<script lang="ts" module>
+    import { onMount, onDestroy } from 'svelte';
+    import { fly } from 'svelte/transition';
+    import { expoOut } from 'svelte/easing';
+    import { cards } from '$lib/stores';
+    import { pathParams } from '$lib/router/path';
+    import { autofocus } from '$lib/actions/autofocus';
+    import BackPanel from '$lib/components/BackPanel.svelte';
+</script>
 
-    let editor;
+<script lang="ts">
+    const ID = $state($pathParams.get('id'));
+    const CARD = cards.id(ID);
 
-    // Search card
-    let card =
-        $cards[
-            $cards.indexOf(
-                $cards.find((c) => c.id === parseInt($pathparams.get("id"))),
-            )
-        ];
+    let fullHeightStyle = $state('height:' + window.innerHeight + 'px');
 
-    // On change save to localStorage
-    $effect(() => localStorage.setItem("cards", JSON.stringify($cards)));
+    window.onresize = () => {
+        fullHeightStyle = 'height:' + window.innerHeight + 'px';
+    };
 
-    // On open editor
     onMount(() => {
-        editor.focus();
-        $cards = moveElement($cards, $cards.indexOf(card), 0);
-        card.state === "active" ? null : (card.state = "active");
+        // card.state === 'active' ? null : (card.state = 'active');
     });
 
-    // Full window height style
-    let fullHeightStyle = $state("height:" + window.innerHeight + "px");
-    window.onresize = () => {
-        fullHeightStyle = "height:" + window.innerHeight + "px";
-    };
+    onDestroy(() => cards.edit(CARD));
 </script>
 
 <BackPanel />
 <textarea
+    use:autofocus
     class="editor"
     name="Editor"
     placeholder="Type here..."
     style={fullHeightStyle}
     in:fly={{ y: 16, delay: 35, duration: 300, easing: expoOut }}
-    bind:value={card.content}
-    bind:this={editor}
+    bind:value={CARD.content}
 >
 </textarea>
 

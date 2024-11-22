@@ -1,22 +1,23 @@
-<script>
-    import { fly } from "svelte/transition";
-    import { expoOut } from "svelte/easing";
+<script lang="ts" module>
+    import { fly } from 'svelte/transition';
+    import { expoOut } from 'svelte/easing';
+</script>
 
+<script lang="ts">
     let {
         id,
-        paddingTop = "0px",
-        background = "transparent",
+        paddingTop = '0px',
+        background = 'transparent',
         zIndex = 1,
         flyIn = 16,
         flyOut = -8,
         children,
     } = $props();
 
-    // Full window height
-    let fullHeight = $state(window.innerHeight + "px");
+    let fullHeight = $state(window.innerHeight + 'px');
 
     window.onresize = () => {
-        fullHeight = window.innerHeight + "px";
+        fullHeight = window.innerHeight + 'px';
     };
 </script>
 

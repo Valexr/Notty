@@ -1,6 +1,7 @@
 export type Card = {
-    id: number
+    id: string
     type: string
     content: string
-    state: "active" | "archived"
+    state: "active" | "archived",
+    swipeable: boolean
 }
