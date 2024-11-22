@@ -1,5 +1,5 @@
 <script lang="ts" module>
-    import { cards, contextMenu } from '$lib/stores';
+    import { contextMenu } from '$lib/stores';
     import Route from '$lib/router/Route.svelte';
     import Home from '$pages/Home.svelte';
     import Editor from '$pages/Editor.svelte';
