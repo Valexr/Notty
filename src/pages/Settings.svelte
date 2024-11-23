@@ -12,10 +12,6 @@
                 Clear ALL data
             </button>
         </section>
-        <section style="padding: var(--padding)">
-            Find a bug? Have a problem, question or idea? Contact me @valexr -
-            telegram
-        </section>
     </menu>
 </View>
 

@@ -1,5 +1,5 @@
 <script lang="ts" module>
-    import { onMount, onDestroy } from 'svelte';
+    import { onDestroy } from 'svelte';
     import { fly } from 'svelte/transition';
     import { expoOut } from 'svelte/easing';
     import { cards } from '$lib/stores';
@@ -12,18 +12,12 @@
     const ID = $state($pathParams.get('id'));
     const CARD = cards.id(ID);
 
-    let fullHeightStyle = $state('height:' + window.innerHeight + 'px');
-
-    window.onresize = () => {
-        fullHeightStyle = 'height:' + window.innerHeight + 'px';
-    };
-
-    onMount(() => {
-        // card.state === 'active' ? null : (card.state = 'active');
-    });
+    let innerHeight = $state(0);
 
     onDestroy(() => cards.edit(CARD));
 </script>
+
+<svelte:window bind:innerHeight />
 
 <BackPanel />
 <textarea
@@ -31,7 +25,7 @@
     class="editor"
     name="Editor"
     placeholder="Type here..."
-    style={fullHeightStyle}
+    style="height: {innerHeight}px;"
     in:fly={{ y: 16, delay: 35, duration: 300, easing: expoOut }}
     bind:value={CARD.content}
 >
