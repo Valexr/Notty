@@ -3,6 +3,10 @@
     import { contextMenu, cards } from '$lib/stores';
     import { outclick } from '$lib/actions/outclick';
     import Icon from './Icon/Icon.svelte';
+
+    type ClickEvent = MouseEvent & {
+        currentTarget: HTMLElement & { id: string };
+    };
 </script>
 
 <script lang="ts">
@@ -19,30 +23,36 @@
 
     const menu = $state([
         {
-            action: async (e) => {
-                await cards.copy(e.currentTarget.id);
-                $contextMenu.isOpen = false;
-            },
+            action: cardCopy,
             icon: 'notes',
-            text: 'Copy all',
+            text: 'Copy',
         },
         {
-            action: (e) => {
-                cards.archive(e.currentTarget.id);
-                $contextMenu.isOpen = false;
-            },
+            action: cardArchive,
             icon: 'access_time',
             text: $contextMenu.cardState === 'active' ? 'Archive' : 'Unarchive',
         },
         {
-            action: (e) => {
-                cards.delete(e.currentTarget.id);
-                $contextMenu.isOpen = false;
-            },
+            action: cardDelete,
             icon: 'delete',
             text: 'Delete',
         },
     ]);
+
+    async function cardCopy(e: ClickEvent) {
+        await cards.copy(e.currentTarget?.id);
+        $contextMenu.isOpen = false;
+    }
+
+    function cardArchive(e: ClickEvent) {
+        cards.archive(e.currentTarget?.id);
+        $contextMenu.isOpen = false;
+    }
+
+    function cardDelete(e: ClickEvent) {
+        cards.delete(e.currentTarget?.id);
+        $contextMenu.isOpen = false;
+    }
 </script>
 
 <menu

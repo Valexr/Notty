@@ -11,7 +11,6 @@ export const searchedCards = derived([cards, searchText], ([$cards, $searchText]
     return $cards.filter((c) => $searchText && c.content.toLowerCase().includes($searchText.toLowerCase()))
 });
 
-
 function createCards() {
     const INITIAL: Card[] = [{
         id: Date.now().toString(),
@@ -36,7 +35,7 @@ function createCards() {
                 await navigator.clipboard.writeText(card.content);
             }
         },
-        find: (query: Partial<Card>) => update((cards) => cards.filter(c => equals(query, c))),
+        find: (query: Partial<Card>) => update((cards) => cards.filter(c => equal(query, c))),
         state: (state = 'active') => update((cards) => cards.filter((c) => c.state === state)),
         archive: (id: string) => update((cards) => cards.map((c) => c.id === id ? { ...c, state: c.state === "active" ? "archived" : "active" } : c)),
         unarchive: (id: string) => update((cards) => cards.map((c) => c.id === id ? { ...c, state: "active" } : c)),
@@ -44,7 +43,7 @@ function createCards() {
         clear: () => set([])
     }
 
-    function equals(query: Partial<Card>, card: Card) {
+    function equal(query: Partial<Card>, card: Card) {
         return Object.keys(query).every((k) => card[k as keyof Card] === query[k as keyof Card])
     }
 }
